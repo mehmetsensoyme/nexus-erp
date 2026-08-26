@@ -158,7 +158,7 @@ export const useUIStore = create<UIState>((set) => ({
       [moduleKey]: Date.now()
     }
   })),
-  companyLogo: null,
+  companyLogo: '/logo.jpg',
   setCompanyLogo: (logo) => set({ companyLogo: logo }),
   companyName: 'Nexus Yazılım A.Ş.',
   setCompanyName: (name) => set({ companyName: name }),
