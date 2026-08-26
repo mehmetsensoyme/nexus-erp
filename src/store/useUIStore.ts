@@ -160,7 +160,7 @@ export const useUIStore = create<UIState>((set) => ({
   })),
   companyLogo: '/logo.jpg',
   setCompanyLogo: (logo) => set({ companyLogo: logo }),
-  companyName: 'Nexus Yazılım A.Ş.',
+  companyName: 'NEXUS',
   setCompanyName: (name) => set({ companyName: name }),
   isAuthenticated: false,
   login: () => set({ isAuthenticated: true }),

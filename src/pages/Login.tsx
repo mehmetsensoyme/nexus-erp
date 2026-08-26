@@ -53,10 +53,7 @@ export default function Login() {
           >
             
             {companyLogo ? (
-              <div className="w-16 h-16 rounded-2xl bg-[#141414] border border-[#27272a] p-2 flex items-center justify-center overflow-hidden shadow-2xl shadow-black/50  transition-colors relative">
-                <img src={companyLogo} alt="Company Logo" className="w-full h-full object-contain" />
-                
-              </div>
+              <img src={companyLogo} alt="Company Logo" className="w-16 h-16 rounded-2xl object-cover shadow-2xl shadow-blue-500/10 border border-white/5" />
             ) : (
               <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#141414] to-[#0a0a0a] border border-[#27272a] flex items-center justify-center shadow-2xl shadow-black/50  transition-colors relative overflow-hidden">
                 <Building2 size={28} className="text-[#52525b]  transition-transform" />
@@ -94,7 +91,7 @@ export default function Login() {
         {/* Mobile Logo (Visible only on small screens) */}
         <div className="md:hidden flex flex-col items-center gap-3 mb-12" >
            {companyLogo ? (
-              <img src={companyLogo} alt="Logo" className="w-16 h-16 object-contain rounded-xl" />
+              <img src={companyLogo} alt="Logo" className="w-16 h-16 object-cover rounded-2xl shadow-2xl shadow-blue-500/10 border border-white/5" />
            ) : (
               <div className="w-16 h-16 rounded-2xl bg-[#141414] border border-[#27272a] flex items-center justify-center">
                 <Building2 size={24} className="text-[#52525b]" />
