@@ -43,10 +43,10 @@ export default function Login() {
 
       if (data.user) {
         toast.success('Giriş başarılı! Yönlendiriliyorsunuz...');
-        await checkSession();
+        window.location.href = '/';
       }
     } catch (err: any) {
-      toast.error('Beklenmeyen bir hata oluştu.');
+      toast.error('Hata: ' + (err.message || err)); console.error(err);
       setIsLoading(false);
     }
   };
