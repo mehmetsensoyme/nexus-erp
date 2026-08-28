@@ -22,6 +22,7 @@ import FleetList from './pages/Fleet/FleetList';
 import { useEffect } from 'react';
 import { useUIStore } from './store/useUIStore';
 import Login from './pages/Login';
+import Onboarding from './pages/Onboarding';
 import { Toaster } from 'react-hot-toast';
 import { MonitorSmartphone, Wrench, FileCheck, ShoppingBag, Archive, Receipt, FileSignature, Landmark } from 'lucide-react';
 
@@ -37,7 +38,11 @@ const ContractsList = () => <div className="flex h-96 flex-col items-center just
 const EDevletList = () => <div className="flex h-96 flex-col items-center justify-center text-[#94a3b8] space-y-4"><div className="w-16 h-16 rounded-2xl bg-[#141414] border border-[#27272a] flex items-center justify-center"><Landmark size={32} className="text-blue-500" /></div><div className="text-xl font-medium text-white">e-Devlet Entegrasyonları</div><div>Bu modül Supabase entegrasyonu sonrası aktif edilecektir.</div></div>;
 
 function App() {
-  const { themeMode, isAuthenticated } = useUIStore();
+  const { themeMode, isAuthenticated, isLoadingAuth, checkSession, userProfile } = useUIStore();
+
+  useEffect(() => {
+    checkSession();
+  }, []);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -50,12 +55,29 @@ function App() {
     }
   }, [themeMode]);
 
+  if (isLoadingAuth) {
+    return <div className="min-h-screen bg-[#000000] flex items-center justify-center text-white">Yükleniyor...</div>;
+  }
+
   if (!isAuthenticated) {
     return (
       <>
         <Toaster position="top-right" />
         <Routes>
           <Route path="*" element={<Login />} />
+        </Routes>
+      </>
+    );
+  }
+
+
+  // Eğer giriş yapmış ama şirketi yoksa kurulum ekranına zorla
+  if (isAuthenticated && userProfile && !userProfile.company_id) {
+    return (
+      <>
+        <Toaster position="top-right" />
+        <Routes>
+          <Route path="*" element={<Onboarding />} />
         </Routes>
       </>
     );

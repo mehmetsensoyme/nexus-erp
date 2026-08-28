@@ -83,6 +83,11 @@ interface UIState {
   isAuthenticated: boolean;
   login: () => void;
   logout: () => void;
+  // Auth & Profile
+  userProfile: any | null;
+  isLoadingAuth: boolean;
+  checkSession: () => Promise<void>;
+  setUserProfile: (profile: any) => void;
 }
 
 export const useUIStore = create<UIState>((set) => ({
@@ -179,6 +184,20 @@ export const useUIStore = create<UIState>((set) => ({
   companyName: 'NEXUS',
   setCompanyName: (name) => set({ companyName: name }),
   isAuthenticated: false,
+  userProfile: null,
+  isLoadingAuth: true,
+  checkSession: async () => {
+    const { supabase } = await import('../lib/supabase');
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.user) {
+      const { data: profile } = await supabase.from('profiles').select('*').eq('id', session.user.id).single();
+      set({ isAuthenticated: true, userProfile: profile, isLoadingAuth: false });
+    } else {
+      set({ isAuthenticated: false, userProfile: null, isLoadingAuth: false });
+    }
+  },
+  setUserProfile: (profile) => set({ userProfile: profile }),
+
   login: () => set({ isAuthenticated: true }),
-  logout: () => set({ isAuthenticated: false })
+  logout: () => { import('../lib/supabase').then(m => m.supabase.auth.signOut()); set({ isAuthenticated: false, userProfile: null }); }
 }));
