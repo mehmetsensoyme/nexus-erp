@@ -22,6 +22,18 @@ import FleetList from './pages/Fleet/FleetList';
 import { useEffect } from 'react';
 import { useUIStore } from './store/useUIStore';
 import Login from './pages/Login';
+import { MonitorSmartphone, Wrench, FileCheck, ShoppingBag, Archive, Receipt, FileSignature, Landmark } from 'lucide-react';
+
+
+// Mega ERP Yeni Modüller (Placeholder)
+const PosList = () => <div className="flex h-96 flex-col items-center justify-center text-[#94a3b8] space-y-4"><div className="w-16 h-16 rounded-2xl bg-[#141414] border border-[#27272a] flex items-center justify-center"><MonitorSmartphone size={32} className="text-blue-500" /></div><div className="text-xl font-medium text-white">Hızlı Satış (POS)</div><div>Bu modül Supabase entegrasyonu sonrası aktif edilecektir.</div></div>;
+const FieldServiceList = () => <div className="flex h-96 flex-col items-center justify-center text-[#94a3b8] space-y-4"><div className="w-16 h-16 rounded-2xl bg-[#141414] border border-[#27272a] flex items-center justify-center"><Wrench size={32} className="text-blue-500" /></div><div className="text-xl font-medium text-white">Saha Servis</div><div>Bu modül Supabase entegrasyonu sonrası aktif edilecektir.</div></div>;
+const QualityList = () => <div className="flex h-96 flex-col items-center justify-center text-[#94a3b8] space-y-4"><div className="w-16 h-16 rounded-2xl bg-[#141414] border border-[#27272a] flex items-center justify-center"><FileCheck size={32} className="text-blue-500" /></div><div className="text-xl font-medium text-white">Kalite Kontrol</div><div>Bu modül Supabase entegrasyonu sonrası aktif edilecektir.</div></div>;
+const EcommerceList = () => <div className="flex h-96 flex-col items-center justify-center text-[#94a3b8] space-y-4"><div className="w-16 h-16 rounded-2xl bg-[#141414] border border-[#27272a] flex items-center justify-center"><ShoppingBag size={32} className="text-blue-500" /></div><div className="text-xl font-medium text-white">E-Ticaret & Pazaryeri</div><div>Bu modül Supabase entegrasyonu sonrası aktif edilecektir.</div></div>;
+const AssetsList = () => <div className="flex h-96 flex-col items-center justify-center text-[#94a3b8] space-y-4"><div className="w-16 h-16 rounded-2xl bg-[#141414] border border-[#27272a] flex items-center justify-center"><Archive size={32} className="text-blue-500" /></div><div className="text-xl font-medium text-white">Demirbaş ve Zimmet</div><div>Bu modül Supabase entegrasyonu sonrası aktif edilecektir.</div></div>;
+const ExpensesList = () => <div className="flex h-96 flex-col items-center justify-center text-[#94a3b8] space-y-4"><div className="w-16 h-16 rounded-2xl bg-[#141414] border border-[#27272a] flex items-center justify-center"><Receipt size={32} className="text-blue-500" /></div><div className="text-xl font-medium text-white">Masraf Yönetimi</div><div>Bu modül Supabase entegrasyonu sonrası aktif edilecektir.</div></div>;
+const ContractsList = () => <div className="flex h-96 flex-col items-center justify-center text-[#94a3b8] space-y-4"><div className="w-16 h-16 rounded-2xl bg-[#141414] border border-[#27272a] flex items-center justify-center"><FileSignature size={32} className="text-blue-500" /></div><div className="text-xl font-medium text-white">Sözleşme Yönetimi</div><div>Bu modül Supabase entegrasyonu sonrası aktif edilecektir.</div></div>;
+const EDevletList = () => <div className="flex h-96 flex-col items-center justify-center text-[#94a3b8] space-y-4"><div className="w-16 h-16 rounded-2xl bg-[#141414] border border-[#27272a] flex items-center justify-center"><Landmark size={32} className="text-blue-500" /></div><div className="text-xl font-medium text-white">e-Devlet Entegrasyonları</div><div>Bu modül Supabase entegrasyonu sonrası aktif edilecektir.</div></div>;
 
 function App() {
   const { themeMode, isAuthenticated } = useUIStore();
@@ -68,6 +80,14 @@ function App() {
         <Route path="abonelik" element={<SubscriptionsList />} />
         <Route path="pazarlama" element={<MarketingList />} />
         <Route path="raporlar" element={<ReportsList />} />
+        <Route path="pos" element={<PosList />} />
+        <Route path="field-service" element={<FieldServiceList />} />
+        <Route path="quality" element={<QualityList />} />
+        <Route path="ecommerce" element={<EcommerceList />} />
+        <Route path="assets" element={<AssetsList />} />
+        <Route path="expenses" element={<ExpensesList />} />
+        <Route path="contracts" element={<ContractsList />} />
+        <Route path="edevlet" element={<EDevletList />} />
         {/* Fallback */}
         <Route path="*" element={<div className="flex h-96 items-center justify-center text-[#94a3b8]">404 - Sayfa Bulunamadı</div>} />
       </Route>
