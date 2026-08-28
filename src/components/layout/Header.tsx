@@ -24,7 +24,7 @@ export default function Header() {
 
   // Global Data & UI
   const { contacts, invoices, depots, inventory, notifications, addNotification, markAllNotificationsRead, markNotificationRead, deleteNotification, clearAllNotifications } = useDataStore();
-  const { openDrawer, toggleSidebar, logout, userProfile } = useUIStore();
+  const { openDrawer, toggleSidebar, logout, userProfile, activeModules } = useUIStore();
   const unreadCount = notifications.filter(n => !n.read).length;
 
   // Live Notification Simulator
@@ -60,24 +60,24 @@ export default function Header() {
       
       try {
         const APP_MODULES = [
-          { id: 'm-dash', title: 'Ana Ekran', subtitle: 'Modül', icon: Maximize, path: '/' },
-          { id: 'm-cari', title: 'Cari Kartlar', subtitle: 'Modül', icon: User, path: '/cari' },
-          { id: 'm-stok', title: 'Stok ve Ürünler', subtitle: 'Modül', icon: Package, path: '/stoklar' },
-          { id: 'm-fatura', title: 'Faturalar', subtitle: 'Modül', icon: FileText, path: '/fatura' },
-          { id: 'm-satis', title: 'Satış Yönetimi', subtitle: 'Modül', icon: ShoppingCart, path: '/satis' },
-          { id: 'm-alim', title: 'Satınalma', subtitle: 'Modül', icon: ShoppingBag, path: '/satin-alma' },
-          { id: 'm-pos', title: 'Hızlı Satış (POS)', subtitle: 'Modül', icon: MonitorSmartphone, path: '/pos' },
-          { id: 'm-field', title: 'Saha Servis', subtitle: 'Modül', icon: Wrench, path: '/field-service' },
-          { id: 'm-quality', title: 'Kalite Kontrol', subtitle: 'Modül', icon: FileCheck, path: '/quality' },
-          { id: 'm-ecommerce', title: 'E-Ticaret & Pazaryeri', subtitle: 'Modül', icon: ShoppingBag, path: '/ecommerce' },
-          { id: 'm-assets', title: 'Demirbaş & Zimmet', subtitle: 'Modül', icon: Archive, path: '/assets' },
-          { id: 'm-expenses', title: 'Masraf Yönetimi', subtitle: 'Modül', icon: Receipt, path: '/expenses' },
-          { id: 'm-contracts', title: 'Sözleşme Yönetimi', subtitle: 'Modül', icon: FileSignature, path: '/contracts' },
-          { id: 'm-edevlet', title: 'e-Devlet', subtitle: 'Modül', icon: Landmark, path: '/edevlet' },
-          { id: 'm-ayarlar', title: 'Sistem Ayarları', subtitle: 'Menü', icon: Settings, path: '#settings' }
+          { id: 'm-dash', title: 'Ana Ekran', subtitle: 'Modül', icon: Maximize, path: '/', show: true },
+          { id: 'm-cari', title: 'Cari Kartlar', subtitle: 'Modül', icon: User, path: '/cari', show: activeModules?.contacts },
+          { id: 'm-stok', title: 'Stok ve Ürünler', subtitle: 'Modül', icon: Package, path: '/stoklar', show: activeModules?.inventory },
+          { id: 'm-fatura', title: 'Faturalar', subtitle: 'Modül', icon: FileText, path: '/fatura', show: activeModules?.invoice },
+          { id: 'm-satis', title: 'Teklif & Sipariş', subtitle: 'Modül', icon: ShoppingCart, path: '/satis', show: activeModules?.sales },
+          { id: 'm-alim', title: 'Satınalma', subtitle: 'Modül', icon: ShoppingBag, path: '/satinalma', show: activeModules?.purchase },
+          { id: 'm-pos', title: 'Hızlı Satış (POS)', subtitle: 'Modül', icon: MonitorSmartphone, path: '/pos', show: activeModules?.pos },
+          { id: 'm-field', title: 'Saha Servis', subtitle: 'Modül', icon: Wrench, path: '/field-service', show: activeModules?.field_service },
+          { id: 'm-quality', title: 'Kalite Kontrol', subtitle: 'Modül', icon: FileCheck, path: '/quality', show: activeModules?.quality },
+          { id: 'm-ecommerce', title: 'E-Ticaret & Pazaryeri', subtitle: 'Modül', icon: ShoppingBag, path: '/ecommerce', show: activeModules?.ecommerce },
+          { id: 'm-assets', title: 'Demirbaş & Zimmet', subtitle: 'Modül', icon: Archive, path: '/assets', show: activeModules?.assets },
+          { id: 'm-expenses', title: 'Masraf Yönetimi', subtitle: 'Modül', icon: Receipt, path: '/expenses', show: activeModules?.expenses },
+          { id: 'm-contracts', title: 'Sözleşme Yönetimi', subtitle: 'Modül', icon: FileSignature, path: '/contracts', show: activeModules?.contracts },
+          { id: 'm-edevlet', title: 'e-Devlet', subtitle: 'Modül', icon: Landmark, path: '/edevlet', show: activeModules?.edevlet },
+          { id: 'm-ayarlar', title: 'Sistem Ayarları', subtitle: 'Menü', icon: Settings, path: '#settings', show: true }
         ];
 
-        const matchedModules = APP_MODULES.filter(m => m.title.toLowerCase().includes(searchQuery.toLowerCase()));
+        const matchedModules = APP_MODULES.filter(m => m.show && m.title.toLowerCase().includes(searchQuery.toLowerCase()));
 
         // Parallel fetch from all connected modules (Currently Contacts, Inventory, Invoices)
         const [contactsRes, inventoryRes, invoicesRes] = await Promise.all([
