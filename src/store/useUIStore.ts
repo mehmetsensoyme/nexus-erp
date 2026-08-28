@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 export type DrawerType = 'NONE' | 'NEW_CONTACT' | 'NEW_INVOICE' | 'NEW_DEPOT_TRANSFER' | 'NEW_PURCHASE' | 'NEW_INVENTORY' | 'PROFILE' | 'SETTINGS' | 'CHANGELOG';
 export type ThemeColor = string;
@@ -90,7 +91,9 @@ interface UIState {
   setUserProfile: (profile: any) => void;
 }
 
-export const useUIStore = create<UIState>((set) => ({
+export const useUIStore = create<UIState>()(
+  persist(
+    (set, get) => ({
   activeDrawer: 'NONE',
   editingId: null,
   openDrawer: (drawer, id = null) => set({ activeDrawer: drawer, editingId: id }),
@@ -210,4 +213,19 @@ export const useUIStore = create<UIState>((set) => ({
 
   login: () => set({ isAuthenticated: true }),
   logout: () => { import('../lib/supabase').then(m => m.supabase.auth.signOut()); set({ isAuthenticated: false, userProfile: null }); }
-}));
+}),
+    {
+      name: 'nexus-ui-storage',
+      merge: (persistedState: any, currentState: UIState) => {
+        return {
+          ...currentState,
+          ...persistedState,
+          activeModules: {
+            ...currentState.activeModules,
+            ...(persistedState?.activeModules || {})
+          }
+        };
+      }
+    }
+  )
+);
