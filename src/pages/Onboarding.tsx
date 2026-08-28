@@ -34,11 +34,15 @@ export default function Onboarding() {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) throw new Error('Oturum bulunamadı.');
 
-      // 3. Update profile with company_id
+      // 3. Update or Insert profile with company_id
       const { error: profileError } = await supabase
         .from('profiles')
-        .update({ company_id: company.id })
-        .eq('id', session.user.id);
+        .upsert({ 
+          id: session.user.id, 
+          company_id: company.id,
+          full_name: session.user.user_metadata?.full_name || 'Sistem Yöneticisi',
+          role: 'admin'
+        });
 
       if (profileError) throw profileError;
 

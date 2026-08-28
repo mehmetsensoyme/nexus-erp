@@ -72,7 +72,7 @@ function App() {
 
 
   // Eğer giriş yapmış ama şirketi yoksa kurulum ekranına zorla
-  if (isAuthenticated && userProfile && !userProfile.company_id) {
+  if (isAuthenticated && (!userProfile || !userProfile.company_id)) {
     return (
       <>
         <Toaster position="top-right" />

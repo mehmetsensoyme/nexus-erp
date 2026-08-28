@@ -24,7 +24,7 @@ export default function Header() {
 
   // Global Data & UI
   const { contacts, invoices, depots, inventory, notifications, addNotification, markAllNotificationsRead, markNotificationRead, deleteNotification, clearAllNotifications } = useDataStore();
-  const { openDrawer, toggleSidebar } = useUIStore();
+  const { openDrawer, toggleSidebar, logout } = useUIStore();
   const unreadCount = notifications.filter(n => !n.read).length;
 
   // Live Notification Simulator
@@ -246,7 +246,7 @@ export default function Header() {
                 <Settings size={16} /> Sistem Ayarları
               </button>
               <div className="my-2 border-t border-[#27272a]"></div>
-              <button onClick={() => { toast.error('Sistemden çıkış yetkisi demo ortamında kısıtlanmıştır.'); setUserMenuOpen(false); }} className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-500 hover:bg-red-500/10 transition-colors">
+              <button onClick={() => { logout(); toast.success('Başarıyla çıkış yapıldı.'); }} className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-500 hover:bg-red-500/10 transition-colors">
                 <LogOut size={16} /> Çıkış Yap
               </button>
             </div>
