@@ -2,6 +2,23 @@ import { Rocket, Shield, Palette, Layout, Search, Key, Sparkles, Terminal } from
 
 const logs = [
   {
+    version: 'v1.0.0-beta',
+    date: '29 Ağustos 2026',
+    title: 'Bulut Entegrasyonu, Akıllı Arama ve Dinamik Mimari',
+    icon: Rocket,
+    color: 'text-purple-400',
+    bg: 'bg-purple-400/10',
+    border: 'border-purple-400/20',
+    changes: [
+      'Supabase veritabanı entegrasyonu tamamlandı. Gerçek zamanlı (Realtime) çok kiracılı (multi-tenant) şirket kurulumu ve RLS güvenlik altyapısı yazıldı.',
+      'Cari Kartlar, Stoklar ve Faturalar modülleri sahte (mock) veriden arındırılıp %100 canlı veritabanına bağlandı.',
+      'Genel Arama (Global Search) motoru tamamen akıllı hale getirildi. Artık hem veritabanını tarıyor hem de kullanıcı yetkilerine/ayarlarına göre uygulamadaki 28 modüle anında erişim sağlıyor.',
+      'Sol Menü (Sidebar) Dinamik Motoru kodlandı: Modüller (Ticari, Finans, Operasyon vb.) olarak kategorize edildi. Ayarlardan açılıp kapanan modül saniyesinde sol menüye ve aramaya yansıyor.',
+      'Modül Yönetimi ekranına, sistemdeki tüm modülleri tek tıklamayla aktif/pasif hale getiren Akıllı Buton eklendi.',
+      'Zustand Persist (Hafıza) katmanındaki senkronizasyon hataları çözüldü, sayfayı yenileme (F5) sonrası arayüz ayarlarının sıfırlanma problemi kökünden giderildi.'
+    ]
+  },
+  {
     version: 'v0.2.0-beta',
     date: '27 Ağustos 2026',
     title: 'Şemsiye ERP Mimarisi, Akıllı Menü ve Premium Login',
