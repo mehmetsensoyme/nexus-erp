@@ -255,9 +255,39 @@ export default function SettingsForm() {
 
       {/* Modül Yönetimi */}
       <div className="border-t border-[#27272a] pt-6 pb-4">
-        <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
-          <Palette size={16} className="text-purple-500" /> Modül Yönetimi & Sık Kullanılanlar
-        </h3>
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+          <h3 className="text-sm font-semibold text-white flex items-center gap-2">
+            <Palette size={16} className="text-purple-500" /> Modül Yönetimi & Sık Kullanılanlar
+          </h3>
+          <div className="flex items-center gap-2">
+            <button 
+              type="button"
+              onClick={() => {
+                useUIStore.setState(state => {
+                  const newModules = { ...state.activeModules };
+                  Object.keys(newModules).forEach(k => newModules[k as keyof typeof newModules] = true);
+                  return { activeModules: newModules };
+                });
+              }}
+              className="px-3 py-1.5 text-xs font-medium bg-blue-600/10 text-blue-500 border border-blue-500/20 rounded-lg hover:bg-blue-600/20 transition-colors"
+            >
+              Hepsini Seç
+            </button>
+            <button 
+              type="button"
+              onClick={() => {
+                useUIStore.setState(state => {
+                  const newModules = { ...state.activeModules };
+                  Object.keys(newModules).forEach(k => newModules[k as keyof typeof newModules] = false);
+                  return { activeModules: newModules };
+                });
+              }}
+              className="px-3 py-1.5 text-xs font-medium bg-[#141414] text-[#94a3b8] border border-[#27272a] rounded-lg hover:text-white transition-colors"
+            >
+              Hiçbirini Seçme
+            </button>
+          </div>
+        </div>
         <p className="text-xs text-[#94a3b8] mb-4">Şirketinizin ihtiyaçlarına göre kullanılmayan modülleri devre dışı bırakın veya yıldıza tıklayarak sol menüde "Sık Kullanılanlara" sabitleyin.</p>
         <div className="space-y-2">
           {[
