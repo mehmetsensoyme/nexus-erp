@@ -43,19 +43,56 @@ export default function Header() {
     return () => clearInterval(interval);
   }, [addNotification]);
 
-  // Unified Search Logic (Fixed)
-  const getSearchResults = () => {
-    if (searchQuery.length < 2) return [];
-    const query = searchQuery.toLowerCase();
-    
-    const matchedContacts = contacts.filter(c => c.name.toLowerCase().includes(query) || c.taxId.includes(query)).map(c => ({ id: `c-${c.id}`, title: c.name, subtitle: 'Cari Kart', icon: User, path: '/cari' }));
-    const matchedInvoices = invoices.filter(i => i.no.toLowerCase().includes(query) || i.company.toLowerCase().includes(query)).map(i => ({ id: `i-${i.id}`, title: i.no, subtitle: `Fatura - ${i.company}`, icon: FileText, path: '/fatura' }));
-    const matchedDepots = depots.filter(d => d.code.toLowerCase().includes(query) || d.docNo.toLowerCase().includes(query) || d.name.toLowerCase().includes(query)).map(d => ({ id: `d-${d.id}`, title: d.docNo, subtitle: `Transfer - ${d.code}`, icon: Box, path: '/depo' }));
-    const matchedInventory = inventory.filter(s => s.code.toLowerCase().includes(query) || s.name.toLowerCase().includes(query) || s.category.toLowerCase().includes(query)).map(s => ({ id: `s-${s.id}`, title: s.name, subtitle: `Stok - ${s.code}`, icon: Package, path: '/stoklar' }));
+  // Supabase Async Search Logic
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
 
-    return [...matchedContacts, ...matchedInvoices, ...matchedDepots, ...matchedInventory].slice(0, 6);
-  };
-  const searchResults = getSearchResults();
+  useEffect(() => {
+    const fetchSearchResults = async () => {
+      if (searchQuery.length < 2) {
+        setSearchResults([]);
+        return;
+      }
+      setIsSearching(true);
+      
+      const { supabase } = await import('../../lib/supabase');
+      const query = `%${searchQuery}%`;
+      
+      try {
+        // Parallel fetch from all connected modules (Currently Contacts, Inventory, Invoices)
+        const [contactsRes, inventoryRes, invoicesRes] = await Promise.all([
+          supabase.from('contacts').select('id, name').ilike('name', query).limit(3),
+          supabase.from('inventory_items').select('id, name, code').ilike('name', query).limit(3),
+          supabase.from('invoices').select('id, invoice_number').ilike('invoice_number', query).limit(3)
+        ]);
+
+        const results = [];
+        
+        if (contactsRes.data) {
+          results.push(...contactsRes.data.map(c => ({ id: `c-${c.id}`, title: c.name, subtitle: 'Cari Kart', icon: User, path: '/cari' })));
+        }
+        if (inventoryRes.data) {
+          results.push(...inventoryRes.data.map(i => ({ id: `i-${i.id}`, title: i.name, subtitle: `Stok - ${i.code}`, icon: Package, path: '/stoklar' })));
+        }
+        if (invoicesRes.data) {
+          results.push(...invoicesRes.data.map(inv => ({ id: `inv-${inv.id}`, title: inv.invoice_number, subtitle: 'Fatura', icon: FileText, path: '/fatura' })));
+        }
+        
+        setSearchResults(results.slice(0, 8));
+      } catch (err) {
+        console.error("Arama hatası:", err);
+      } finally {
+        setIsSearching(false);
+      }
+    };
+    
+    // Simple debounce
+    const timer = setTimeout(() => {
+      fetchSearchResults();
+    }, 300);
+    
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   // Handle Keyboard Navigation
   const handleKeyDown = (e: React.KeyboardEvent) => {

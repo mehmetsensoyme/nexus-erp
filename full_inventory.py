@@ -1,4 +1,8 @@
-import { Search, Plus, Filter, Download, Package, MoreVertical, Edit2, Trash2, QrCode } from 'lucide-react';
+with open('src/pages/Inventory/InventoryList.tsx', 'r') as f:
+    original = f.read()
+
+# I will just write a completely clean version that avoids all regex errors.
+clean_file = """import { Search, Plus, Filter, Download, Package, MoreVertical, Edit2, Trash2, QrCode } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useUIStore } from '../../store/useUIStore';
 import { toast } from 'sonner';
@@ -211,3 +215,7 @@ export default function InventoryList() {
     </div>
   );
 }
+"""
+
+with open('src/pages/Inventory/InventoryList.tsx', 'w') as f:
+    f.write(clean_file)

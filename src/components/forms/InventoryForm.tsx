@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { PackageSearch, Save, Info, AlertCircle, RefreshCw } from 'lucide-react';
-import { useDataStore } from '../../store/useDataStore';
+import { supabase } from '../../lib/supabase';
 import { useUIStore } from '../../store/useUIStore';
 import { toast } from 'sonner';
 
 export default function InventoryForm() {
   const { inventory, addInventory, updateInventory } = useDataStore();
-  const { closeDrawer, editingId } = useUIStore();
+  const { closeDrawer, editingId, userProfile } = useUIStore();
+  const [isLoading, setIsLoading] = useState(false);
   
   const [formData, setFormData] = useState({
     code: '',
