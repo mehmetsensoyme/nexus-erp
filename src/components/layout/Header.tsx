@@ -1,4 +1,4 @@
-import { Search, Bell, User, Settings, LogOut, ChevronDown, CheckCircle2, FileText, Box, Maximize, AlertCircle, Trash2, CheckSquare, Package, Menu } from 'lucide-react';
+import { Search, Bell, User, Settings, LogOut, ChevronDown, CheckCircle2, FileText, Box, Maximize, AlertCircle, Trash2, CheckSquare, Package, Menu, MonitorSmartphone, Wrench, FileCheck, ShoppingBag, Archive, Receipt, FileSignature, Landmark, ShoppingCart } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useClickOutside } from '../../hooks/useClickOutside';
@@ -59,6 +59,26 @@ export default function Header() {
       const query = `%${searchQuery}%`;
       
       try {
+        const APP_MODULES = [
+          { id: 'm-dash', title: 'Ana Ekran', subtitle: 'Modül', icon: Maximize, path: '/' },
+          { id: 'm-cari', title: 'Cari Kartlar', subtitle: 'Modül', icon: User, path: '/cari' },
+          { id: 'm-stok', title: 'Stok ve Ürünler', subtitle: 'Modül', icon: Package, path: '/stoklar' },
+          { id: 'm-fatura', title: 'Faturalar', subtitle: 'Modül', icon: FileText, path: '/fatura' },
+          { id: 'm-satis', title: 'Satış Yönetimi', subtitle: 'Modül', icon: ShoppingCart, path: '/satis' },
+          { id: 'm-alim', title: 'Satınalma', subtitle: 'Modül', icon: ShoppingBag, path: '/satin-alma' },
+          { id: 'm-pos', title: 'Hızlı Satış (POS)', subtitle: 'Modül', icon: MonitorSmartphone, path: '/pos' },
+          { id: 'm-field', title: 'Saha Servis', subtitle: 'Modül', icon: Wrench, path: '/field-service' },
+          { id: 'm-quality', title: 'Kalite Kontrol', subtitle: 'Modül', icon: FileCheck, path: '/quality' },
+          { id: 'm-ecommerce', title: 'E-Ticaret & Pazaryeri', subtitle: 'Modül', icon: ShoppingBag, path: '/ecommerce' },
+          { id: 'm-assets', title: 'Demirbaş & Zimmet', subtitle: 'Modül', icon: Archive, path: '/assets' },
+          { id: 'm-expenses', title: 'Masraf Yönetimi', subtitle: 'Modül', icon: Receipt, path: '/expenses' },
+          { id: 'm-contracts', title: 'Sözleşme Yönetimi', subtitle: 'Modül', icon: FileSignature, path: '/contracts' },
+          { id: 'm-edevlet', title: 'e-Devlet', subtitle: 'Modül', icon: Landmark, path: '/edevlet' },
+          { id: 'm-ayarlar', title: 'Sistem Ayarları', subtitle: 'Menü', icon: Settings, path: '#settings' }
+        ];
+
+        const matchedModules = APP_MODULES.filter(m => m.title.toLowerCase().includes(searchQuery.toLowerCase()));
+
         // Parallel fetch from all connected modules (Currently Contacts, Inventory, Invoices)
         const [contactsRes, inventoryRes, invoicesRes] = await Promise.all([
           supabase.from('contacts').select('id, name').ilike('name', query).limit(3),
@@ -66,7 +86,7 @@ export default function Header() {
           supabase.from('invoices').select('id, invoice_number').ilike('invoice_number', query).limit(3)
         ]);
 
-        const results = [];
+        const results = [...matchedModules];
         
         if (contactsRes.data) {
           results.push(...contactsRes.data.map(c => ({ id: `c-${c.id}`, title: c.name, subtitle: 'Cari Kart', icon: User, path: '/cari' })));
@@ -107,9 +127,14 @@ export default function Header() {
     } else if (e.key === 'Enter') {
       e.preventDefault();
       const targetIndex = selectedIndex >= 0 ? selectedIndex : 0; // Default to first if none selected
-      if (searchResults[targetIndex]) {
-        navigate(searchResults[targetIndex].path);
-        toast.success(`${searchResults[targetIndex].title} detayına gidildi.`);
+      const result = searchResults[targetIndex];
+      if (result) {
+        if (result.path === '#settings') {
+          openDrawer('SETTINGS');
+        } else {
+          navigate(result.path);
+          toast.success(`${result.title} ekranına gidildi.`);
+        }
         setSearchFocused(false);
         setSearchQuery('');
         setSelectedIndex(-1);
@@ -169,8 +194,12 @@ export default function Header() {
                 <button 
                   key={result.id}
                   onClick={() => {
-                    navigate(result.path);
-                    toast.success(`${result.title} detayına gidildi.`);
+                    if (result.path === '#settings') {
+                      openDrawer('SETTINGS');
+                    } else {
+                      navigate(result.path);
+                      toast.success(`${result.title} ekranına gidildi.`);
+                    }
                     setSearchFocused(false);
                     setSearchQuery('');
                     setSelectedIndex(-1);
