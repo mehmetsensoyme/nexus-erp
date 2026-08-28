@@ -278,7 +278,15 @@ export default function SettingsForm() {
             { key: 'projects', label: 'Görev & Proje Yönetimi' },
             { key: 'marketing', label: 'Pazarlama (SMS & E-Posta)' },
             { key: 'hr', label: 'İnsan Kaynakları' },
-            { key: 'reports', label: 'Gelişmiş Raporlar' }
+            { key: 'reports', label: 'Gelişmiş Raporlar' },
+            { key: 'pos', label: 'Hızlı Satış (POS) Terminali' },
+            { key: 'field_service', label: 'Saha Servis Yönetimi' },
+            { key: 'quality', label: 'Kalite Kontrol' },
+            { key: 'ecommerce', label: 'E-Ticaret & Pazaryeri' },
+            { key: 'assets', label: 'Demirbaş ve Zimmet' },
+            { key: 'expenses', label: 'Masraf Yönetimi' },
+            { key: 'contracts', label: 'Sözleşme Yönetimi' },
+            { key: 'edevlet', label: 'e-Devlet İşlemleri' }
           ].map(mod => (
             <div key={mod.key} className="flex items-center justify-between p-3 bg-[#141414] border border-[#27272a] rounded-lg hover:border-[#52525b] transition-colors">
               <label className="flex items-center gap-3 cursor-pointer flex-1">

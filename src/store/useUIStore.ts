@@ -47,7 +47,15 @@ interface UIState {
     contacts: boolean;
     hr: boolean;
     manufacturing: boolean;
-    reports: boolean;
+        reports: boolean;
+    pos: boolean;
+    field_service: boolean;
+    quality: boolean;
+    ecommerce: boolean;
+    assets: boolean;
+    expenses: boolean;
+    contracts: boolean;
+    edevlet: boolean;
     projects: boolean;
     b2b: boolean;
     logistics: boolean;
@@ -131,7 +139,15 @@ export const useUIStore = create<UIState>((set) => ({
     banking: false,
     tickets: false,
     subscriptions: false,
-    marketing: false,
+        marketing: false,
+    pos: true,
+    field_service: true,
+    quality: true,
+    ecommerce: true,
+    assets: true,
+    expenses: true,
+    contracts: true,
+    edevlet: true,
     fleet: false,
   },
   toggleModule: (moduleKey) => set((state) => ({
