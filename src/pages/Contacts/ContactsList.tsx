@@ -1,24 +1,69 @@
 import { Search, Plus, Filter, Download, Building2, User, Phone, Mail, MoreVertical, Trash2, Edit2 } from 'lucide-react';
 import { useUIStore } from '../../store/useUIStore';
-import { useDataStore } from '../../store/useDataStore';
+import { supabase } from '../../lib/supabase';
+import { useEffect } from 'react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { downloadCSV } from '../../lib/exportUtils';
 
 export default function ContactsList() {
-  const { openDrawer } = useUIStore();
-  const { contacts } = useDataStore();
+  const { openDrawer, userProfile } = useUIStore();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState('Tümü');
+  
+  // Supabase State
+  const [contacts, setContacts] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const fetchContacts = async () => {
+    if (!userProfile?.company_id) return;
+    setIsLoading(true);
+    const { data, error } = await supabase
+      .from('contacts')
+      .select('*')
+      .order('created_at', { ascending: false });
+      
+    if (error) {
+      toast.error('Cariler yüklenemedi: ' + error.message);
+    } else {
+      setContacts(data || []);
+    }
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    fetchContacts();
+
+    // Listen for realtime changes
+    const channel = supabase.channel('custom-all-channel')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'contacts' }, (payload) => {
+        fetchContacts();
+      })
+      .subscribe();
+      
+    return () => { supabase.removeChannel(channel) };
+  }, [userProfile?.company_id]);
 
   // Live Reactive Filter
   const filteredContacts = contacts.filter(contact => {
     const matchesSearch = contact.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          contact.taxId.includes(searchQuery) || 
-                          contact.email.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesType = activeFilter === 'Tümü' || contact.type === activeFilter;
+                          (contact.tax_number && contact.tax_number.includes(searchQuery)) || 
+                          (contact.email && contact.email.toLowerCase().includes(searchQuery.toLowerCase()));
+    
+    // Map DB types back to UI filters
+    const typeLabel = contact.type === 'CUSTOMER' ? 'Müşteri' : 'Tedarikçi';
+    const matchesType = activeFilter === 'Tümü' || typeLabel === activeFilter;
+    
     return matchesSearch && matchesType;
   });
+
+  const handleDelete = async (id: string) => {
+    if (confirm('Bu cariyi silmek istediğinize emin misiniz?')) {
+      const { error } = await supabase.from('contacts').delete().eq('id', id);
+      if (error) toast.error('Silinirken hata oluştu');
+      else toast.success('Cari silindi');
+    }
+  };
 
   return (
     <div className="space-y-4">

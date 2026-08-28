@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useUIStore } from '../../store/useUIStore';
-import { useDataStore } from '../../store/useDataStore';
+import { supabase } from '../../lib/supabase';
 import { toast } from 'sonner';
 
 export default function ContactForm() {
-  const { closeDrawer, editingId } = useUIStore();
-  const { addContact, updateContact, contacts } = useDataStore();
+  const { closeDrawer, editingId, userProfile } = useUIStore();
+  const [isLoading, setIsLoading] = useState(false);
+  
   
   const [formData, setFormData] = useState({
     type: 'Müşteri',
@@ -19,20 +20,23 @@ export default function ContactForm() {
 
   useEffect(() => {
     if (editingId) {
-      const contactToEdit = contacts.find(c => c.id === editingId);
-      if (contactToEdit) {
-        setFormData({
-          type: contactToEdit.type || 'Müşteri',
-          name: contactToEdit.name || '',
-          taxId: contactToEdit.taxId || '',
-          taxOffice: contactToEdit.taxOffice || '',
-          phone: contactToEdit.phone || '',
-          email: contactToEdit.email || '',
-          address: '' // Mock address since we didn't add it to the model initially
-        });
-      }
+      const fetchContact = async () => {
+        const { data } = await supabase.from('contacts').select('*').eq('id', editingId).single();
+        if (data) {
+          setFormData({
+            type: data.type === 'CUSTOMER' ? 'Müşteri' : 'Tedarikçi',
+            name: data.name,
+            taxId: data.tax_number || '',
+            taxOffice: data.tax_office || '',
+            phone: data.phone || '',
+            email: data.email || '',
+            address: data.address || ''
+          });
+        }
+      };
+      fetchContact();
     }
-  }, [editingId, contacts]);
+  }, [editingId]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
