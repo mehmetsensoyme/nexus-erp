@@ -1,4 +1,4 @@
-import { Search, Bell, User, Settings, LogOut, ChevronDown, CheckCircle2, FileText, Box, Maximize, AlertCircle, Trash2, CheckSquare, Package, Menu, MonitorSmartphone, Wrench, FileCheck, ShoppingBag, Archive, Receipt, FileSignature, Landmark, ShoppingCart } from 'lucide-react';
+import { Search, Bell, User, Settings, LogOut, ChevronDown, CheckCircle2, FileText, Box, Maximize, AlertCircle, Trash2, CheckSquare, Package, Menu, MonitorSmartphone, Wrench, FileCheck, ShoppingBag, Archive, Receipt, FileSignature, Landmark, ShoppingCart, LayoutDashboard, Handshake, Globe, ArrowRightLeft, Factory, Truck, WalletCards, Building2, Repeat, Users, Ticket, Briefcase, Megaphone, UserSquare2, PieChart } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useClickOutside } from '../../hooks/useClickOutside';
@@ -60,24 +60,43 @@ export default function Header() {
       
       try {
         const APP_MODULES = [
-          { id: 'm-dash', title: 'Ana Ekran', subtitle: 'Modül', icon: Maximize, path: '/', show: true },
-          { id: 'm-cari', title: 'Cari Kartlar', subtitle: 'Modül', icon: User, path: '/cari', show: activeModules?.contacts },
-          { id: 'm-stok', title: 'Stok ve Ürünler', subtitle: 'Modül', icon: Package, path: '/stoklar', show: activeModules?.inventory },
-          { id: 'm-fatura', title: 'Faturalar', subtitle: 'Modül', icon: FileText, path: '/fatura', show: activeModules?.invoice },
-          { id: 'm-satis', title: 'Teklif & Sipariş', subtitle: 'Modül', icon: ShoppingCart, path: '/satis', show: activeModules?.sales },
-          { id: 'm-alim', title: 'Satınalma', subtitle: 'Modül', icon: ShoppingBag, path: '/satinalma', show: activeModules?.purchase },
-          { id: 'm-pos', title: 'Hızlı Satış (POS)', subtitle: 'Modül', icon: MonitorSmartphone, path: '/pos', show: activeModules?.pos },
-          { id: 'm-field', title: 'Saha Servis', subtitle: 'Modül', icon: Wrench, path: '/field-service', show: activeModules?.field_service },
-          { id: 'm-quality', title: 'Kalite Kontrol', subtitle: 'Modül', icon: FileCheck, path: '/quality', show: activeModules?.quality },
-          { id: 'm-ecommerce', title: 'E-Ticaret & Pazaryeri', subtitle: 'Modül', icon: ShoppingBag, path: '/ecommerce', show: activeModules?.ecommerce },
-          { id: 'm-assets', title: 'Demirbaş & Zimmet', subtitle: 'Modül', icon: Archive, path: '/assets', show: activeModules?.assets },
-          { id: 'm-expenses', title: 'Masraf Yönetimi', subtitle: 'Modül', icon: Receipt, path: '/expenses', show: activeModules?.expenses },
-          { id: 'm-contracts', title: 'Sözleşme Yönetimi', subtitle: 'Modül', icon: FileSignature, path: '/contracts', show: activeModules?.contracts },
-          { id: 'm-edevlet', title: 'e-Devlet', subtitle: 'Modül', icon: Landmark, path: '/edevlet', show: activeModules?.edevlet },
-          { id: 'm-ayarlar', title: 'Sistem Ayarları', subtitle: 'Menü', icon: Settings, path: '#settings', show: true }
+          { id: 'm-dash', title: 'Ana Ekran', searchTerms: 'dashboard ana ekran', subtitle: 'Modül', icon: LayoutDashboard, path: '/ana-ekran', show: true },
+          { id: 'm-sales', title: 'Teklif & Sipariş', searchTerms: 'teklif sipariş satış sales', subtitle: 'Modül', icon: Handshake, path: '/satis', show: activeModules?.sales },
+          { id: 'm-purchase', title: 'Satınalma', searchTerms: 'satınalma alım tedarik purchase', subtitle: 'Modül', icon: ShoppingCart, path: '/satinalma', show: activeModules?.purchase },
+          { id: 'm-contacts', title: 'Cari Kartlar', searchTerms: 'cari kartlar müşteri tedarikçi contacts', subtitle: 'Modül', icon: Users, path: '/cari', show: activeModules?.contacts },
+          { id: 'm-inventory', title: 'Stoklar', searchTerms: 'stoklar ürünler envanter inventory', subtitle: 'Modül', icon: Package, path: '/stoklar', show: activeModules?.inventory },
+          { id: 'm-depot', title: 'Depo İşlemleri', searchTerms: 'depo işlemleri transfer depot', subtitle: 'Modül', icon: ArrowRightLeft, path: '/depo', show: activeModules?.depot },
+          { id: 'm-invoice', title: 'Fatura (e-Belge)', searchTerms: 'fatura e-belge e-fatura invoice', subtitle: 'Modül', icon: FileText, path: '/fatura', show: activeModules?.invoice },
+          { id: 'm-finance', title: 'Finans & Kasa', searchTerms: 'finans kasa para finance', subtitle: 'Modül', icon: WalletCards, path: '/finans', show: activeModules?.finance },
+          { id: 'm-edevlet', title: 'e-Devlet İşlemleri', searchTerms: 'e-devlet edevlet gib', subtitle: 'Modül', icon: Landmark, path: '/edevlet', show: activeModules?.edevlet },
+          { id: 'm-expenses', title: 'Masraf Yönetimi', searchTerms: 'masraf masraflar fiş expenses', subtitle: 'Modül', icon: Receipt, path: '/expenses', show: activeModules?.expenses },
+          { id: 'm-banking', title: 'Açık Bankacılık', searchTerms: 'banka bankacılık banking hesap', subtitle: 'Modül', icon: Building2, path: '/bankacilik', show: activeModules?.banking },
+          { id: 'm-contracts', title: 'Sözleşmeler', searchTerms: 'sözleşme sözleşmeler contracts', subtitle: 'Modül', icon: FileSignature, path: '/contracts', show: activeModules?.contracts },
+          { id: 'm-manufacturing', title: 'Üretim & Reçete', searchTerms: 'üretim reçete imalat mrp', subtitle: 'Modül', icon: Factory, path: '/uretim', show: activeModules?.manufacturing },
+          { id: 'm-quality', title: 'Kalite Kontrol', searchTerms: 'kalite kontrol test quality', subtitle: 'Modül', icon: FileCheck, path: '/quality', show: activeModules?.quality },
+          { id: 'm-fleet', title: 'Araç & Makine İkmal', searchTerms: 'araç makine ikmal filo fleet', subtitle: 'Modül', icon: Truck, path: '/ikmal', show: activeModules?.fleet },
+          { id: 'm-assets', title: 'Demirbaş & Zimmet', searchTerms: 'demirbaş zimmet assets', subtitle: 'Modül', icon: Archive, path: '/assets', show: activeModules?.assets },
+          { id: 'm-logistics', title: 'Kargo & Lojistik', searchTerms: 'kargo lojistik sevkiyat logistics', subtitle: 'Modül', icon: Truck, path: '/kargo', show: activeModules?.logistics },
+          { id: 'm-pos', title: 'Hızlı Satış (POS)', searchTerms: 'hızlı satış pos perakende', subtitle: 'Modül', icon: MonitorSmartphone, path: '/pos', show: activeModules?.pos },
+          { id: 'm-ecommerce', title: 'E-Ticaret', searchTerms: 'e-ticaret pazaryeri eticaret ecommerce', subtitle: 'Modül', icon: ShoppingBag, path: '/ecommerce', show: activeModules?.ecommerce },
+          { id: 'm-field', title: 'Saha Servis', searchTerms: 'saha servis field service', subtitle: 'Modül', icon: Wrench, path: '/field-service', show: activeModules?.field_service },
+          { id: 'm-b2b', title: 'B2B Bayi Portalı', searchTerms: 'b2b bayi portalı', subtitle: 'Modül', icon: Globe, path: '/b2b', show: activeModules?.b2b },
+          { id: 'm-projects', title: 'Görev & Proje', searchTerms: 'görev proje projeler projects', subtitle: 'Modül', icon: Briefcase, path: '/projeler', show: activeModules?.projects },
+          { id: 'm-hr', title: 'İnsan Kaynakları', searchTerms: 'insan kaynakları ik personel hr', subtitle: 'Modül', icon: UserSquare2, path: '/ik', show: activeModules?.hr },
+          { id: 'm-tickets', title: 'Destek & Ticket', searchTerms: 'destek ticket yardım tickets', subtitle: 'Modül', icon: Ticket, path: '/destek', show: activeModules?.tickets },
+          { id: 'm-subscriptions', title: 'Abonelik Yönetimi', searchTerms: 'abonelik düzenli fatura subscriptions', subtitle: 'Modül', icon: Repeat, path: '/abonelik', show: activeModules?.subscriptions },
+          { id: 'm-marketing', title: 'Pazarlama', searchTerms: 'pazarlama sms e-posta marketing', subtitle: 'Modül', icon: Megaphone, path: '/pazarlama', show: activeModules?.marketing },
+          { id: 'm-reports', title: 'Gelişmiş Raporlar', searchTerms: 'rapor raporlar gelişmiş raporlama reports', subtitle: 'Modül', icon: PieChart, path: '/raporlar', show: activeModules?.reports },
+          { id: 'm-ayarlar', title: 'Sistem Ayarları', searchTerms: 'ayarlar sistem ayar settings', subtitle: 'Menü', icon: Settings, path: '#settings', show: true }
         ];
 
-        const matchedModules = APP_MODULES.filter(m => m.show && m.title.toLowerCase().includes(searchQuery.toLowerCase()));
+        const normalizeStr = (s: string) => s.toLowerCase().replace(/i̇/g, 'i').replace(/ı/g, 'i').replace(/ş/g, 's').replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ö/g, 'o').replace(/ç/g, 'c');
+        const q = normalizeStr(searchQuery);
+        
+        const matchedModules = APP_MODULES.filter(m => {
+          if (!m.show) return false;
+          return normalizeStr(m.title).includes(q) || normalizeStr(m.searchTerms).includes(q);
+        });
 
         // Parallel fetch from all connected modules (Currently Contacts, Inventory, Invoices)
         const [contactsRes, inventoryRes, invoicesRes] = await Promise.all([
