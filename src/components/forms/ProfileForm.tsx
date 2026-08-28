@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 import { useState } from 'react';
 
 export default function ProfileForm() {
-  const { closeDrawer } = useUIStore();
+  const { closeDrawer, userProfile } = useUIStore();
   const [twoFactor, setTwoFactor] = useState(false);
 
   const handlePhotoUpload = () => {
@@ -36,7 +36,7 @@ export default function ProfileForm() {
           </div>
         </div>
         
-        <h2 className="text-lg font-bold text-white z-10">Yönetici Hesabı</h2>
+        <h2 className="text-lg font-bold text-white z-10">{userProfile?.full_name || "Yönetici Hesabı"}</h2>
         <span className="text-xs text-blue-400 font-medium px-2 py-0.5 bg-blue-500/10 rounded border border-blue-500/20 mt-1 z-10">Süper Admin Rolü</span>
       </div>
 
@@ -46,14 +46,14 @@ export default function ProfileForm() {
           <label className="block text-xs font-medium text-[#94a3b8] mb-1">Ad Soyad</label>
           <div className="relative">
             <User size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#52525b]" />
-            <input type="text" defaultValue="Sistem Yöneticisi" className="w-full bg-[#141414] border border-[#27272a] rounded-lg pl-9 pr-3 py-2 text-sm text-white focus:border-blue-500 outline-none transition-all" />
+            <input type="text" defaultValue={userProfile?.full_name || "Sistem Yöneticisi"} className="w-full bg-[#141414] border border-[#27272a] rounded-lg pl-9 pr-3 py-2 text-sm text-white focus:border-blue-500 outline-none transition-all" />
           </div>
         </div>
         <div>
           <label className="block text-xs font-medium text-[#94a3b8] mb-1">E-Posta Adresi</label>
           <div className="relative">
             <Mail size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#52525b]" />
-            <input type="email" defaultValue="admin@nexus.com" disabled className="w-full bg-[#141414] border border-[#27272a] rounded-lg pl-9 pr-3 py-2 text-sm text-[#52525b] cursor-not-allowed outline-none" />
+            <input type="email" defaultValue={userProfile?.email || "admin@nexus.com"} disabled className="w-full bg-[#141414] border border-[#27272a] rounded-lg pl-9 pr-3 py-2 text-sm text-[#52525b] cursor-not-allowed outline-none" />
           </div>
         </div>
       </div>
@@ -98,7 +98,7 @@ export default function ProfileForm() {
             </div>
             <div className="text-left">
               <div className="text-sm font-medium text-white">Google Workspace</div>
-              <div className="text-xs text-[#94a3b8]">admin@nexus.com</div>
+              <div className="text-xs text-[#94a3b8]">{userProfile?.email || "admin@nexus.com"}</div>
             </div>
           </div>
           <span className="text-xs text-blue-500 font-medium opacity-0 group-hover:opacity-100 transition-opacity">Bağlı</span>
