@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { supabase } from '../lib/supabase';
+import toast from 'react-hot-toast';
 import { useUIStore } from '../store/useUIStore';
 import { useClickOutside } from '../hooks/useClickOutside';
 import { Command, Mail, Lock, ArrowRight, ShieldCheck, Upload, Building2, X, FileText, Shield, MapPin, Phone, ArrowLeft } from 'lucide-react';
@@ -23,13 +25,30 @@ export default function Login() {
     }, 1500);
   };
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setTimeout(() => {
+    
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) {
+        toast.error('Giriş başarısız: ' + error.message);
+        setIsLoading(false);
+        return;
+      }
+
+      if (data.user) {
+        toast.success('Giriş başarılı! Yönlendiriliyorsunuz...');
+        login();
+      }
+    } catch (err: any) {
+      toast.error('Beklenmeyen bir hata oluştu.');
       setIsLoading(false);
-      login();
-    }, 1500);
+    }
   };
 
   return (

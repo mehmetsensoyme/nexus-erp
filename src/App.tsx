@@ -22,6 +22,7 @@ import FleetList from './pages/Fleet/FleetList';
 import { useEffect } from 'react';
 import { useUIStore } from './store/useUIStore';
 import Login from './pages/Login';
+import { Toaster } from 'react-hot-toast';
 import { MonitorSmartphone, Wrench, FileCheck, ShoppingBag, Archive, Receipt, FileSignature, Landmark } from 'lucide-react';
 
 
@@ -51,14 +52,19 @@ function App() {
 
   if (!isAuthenticated) {
     return (
-      <Routes>
-        <Route path="*" element={<Login />} />
-      </Routes>
+      <>
+        <Toaster position="top-right" />
+        <Routes>
+          <Route path="*" element={<Login />} />
+        </Routes>
+      </>
     );
   }
 
   return (
-    <Routes>
+    <>
+      <Toaster position="top-right" />
+      <Routes>
       <Route path="/" element={<AppLayout />}>
         <Route index element={<Navigate to="/ana-ekran" replace />} />
         <Route path="ana-ekran" element={<Dashboard />} />
@@ -92,6 +98,7 @@ function App() {
         <Route path="*" element={<div className="flex h-96 items-center justify-center text-[#94a3b8]">404 - Sayfa Bulunamadı</div>} />
       </Route>
     </Routes>
+    </>
   );
 }
 
