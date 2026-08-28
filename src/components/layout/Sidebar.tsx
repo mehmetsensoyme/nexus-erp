@@ -1,5 +1,5 @@
 import { NavLink, Link } from 'react-router-dom';
-import { LayoutDashboard, Users, ShoppingCart, ArrowRightLeft, FileText, Command, Menu, Package, Handshake, WalletCards, Factory, UserSquare2, PieChart, Briefcase, Globe, Truck, Building2, Ticket, Repeat, Megaphone, Wrench, Star } from 'lucide-react';
+import { LayoutDashboard, Users, ShoppingCart, ArrowRightLeft, FileText, Command, Menu, Package, Handshake, WalletCards, Factory, UserSquare2, PieChart, Briefcase, Globe, Truck, Building2, Ticket, Repeat, Megaphone, Wrench, Star, MonitorSmartphone, FileCheck, ShoppingBag, Archive, Receipt, FileSignature, Landmark } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { useUIStore } from '../../store/useUIStore';
 
@@ -26,6 +26,14 @@ export default function Sidebar() {
     { key: 'marketing', path: '/pazarlama', name: 'Pazarlama (SMS)', icon: Megaphone, show: activeModules.marketing },
     { key: 'hr', path: '/ik', name: 'İnsan Kaynakları', icon: UserSquare2, show: activeModules.hr },
     { key: 'reports', path: '/raporlar', name: 'Gelişmiş Raporlar', icon: PieChart, show: activeModules.reports },
+    { key: 'pos', path: '/pos', name: 'Hızlı Satış (POS)', icon: MonitorSmartphone, show: activeModules.pos },
+    { key: 'field_service', path: '/field-service', name: 'Saha Servis', icon: Wrench, show: activeModules.field_service },
+    { key: 'quality', path: '/quality', name: 'Kalite Kontrol', icon: FileCheck, show: activeModules.quality },
+    { key: 'ecommerce', path: '/ecommerce', name: 'E-Ticaret', icon: ShoppingBag, show: activeModules.ecommerce },
+    { key: 'assets', path: '/assets', name: 'Demirbaş', icon: Archive, show: activeModules.assets },
+    { key: 'expenses', path: '/expenses', name: 'Masraflar', icon: Receipt, show: activeModules.expenses },
+    { key: 'contracts', path: '/contracts', name: 'Sözleşmeler', icon: FileSignature, show: activeModules.contracts },
+    { key: 'edevlet', path: '/edevlet', name: 'e-Devlet İşlemleri', icon: Landmark, show: activeModules.edevlet },
   ].filter(item => item.show);
 
   const dashboardItem = allItems.find(i => i.key === 'dashboard');
