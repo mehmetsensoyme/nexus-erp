@@ -1,2 +1,2 @@
 // Uygulamanın güncel sürüm bilgisi
-export const APP_VERSION = 'v0.2.0-beta';
+export const APP_VERSION = 'v1.0.0-beta';
