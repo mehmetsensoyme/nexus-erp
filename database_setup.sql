@@ -115,3 +115,44 @@ CREATE POLICY "Carileri görebilir" ON public.contacts FOR SELECT USING (company
 CREATE POLICY "Cari ekleyebilir" ON public.contacts FOR INSERT WITH CHECK (company_id = public.get_auth_company_id());
 CREATE POLICY "Cari güncelleyebilir" ON public.contacts FOR UPDATE USING (company_id = public.get_auth_company_id());
 CREATE POLICY "Cari silebilir" ON public.contacts FOR DELETE USING (company_id = public.get_auth_company_id());
+
+-- 11. STOK KARTLARI (INVENTORY ITEMS)
+CREATE TABLE IF NOT EXISTS public.inventory_items (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  company_id UUID NOT NULL REFERENCES public.companies(id) ON DELETE CASCADE,
+  code TEXT NOT NULL,
+  name TEXT NOT NULL,
+  category TEXT,
+  unit TEXT DEFAULT 'Adet',
+  price NUMERIC(15,2) DEFAULT 0,
+  stock_quantity NUMERIC(15,2) DEFAULT 0,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+ALTER TABLE public.inventory_items ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Stokları görebilir" ON public.inventory_items FOR SELECT USING (company_id = public.get_auth_company_id());
+CREATE POLICY "Stok ekleyebilir" ON public.inventory_items FOR INSERT WITH CHECK (company_id = public.get_auth_company_id());
+CREATE POLICY "Stok güncelleyebilir" ON public.inventory_items FOR UPDATE USING (company_id = public.get_auth_company_id());
+CREATE POLICY "Stok silebilir" ON public.inventory_items FOR DELETE USING (company_id = public.get_auth_company_id());
+
+-- 12. FATURALAR (INVOICES)
+CREATE TABLE IF NOT EXISTS public.invoices (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  company_id UUID NOT NULL REFERENCES public.companies(id) ON DELETE CASCADE,
+  contact_id UUID NOT NULL REFERENCES public.contacts(id),
+  invoice_number TEXT NOT NULL,
+  type TEXT NOT NULL CHECK (type IN ('SALES', 'PURCHASE')),
+  status TEXT DEFAULT 'DRAFT' CHECK (status IN ('DRAFT', 'ISSUED', 'PAID', 'CANCELLED')),
+  issue_date DATE NOT NULL,
+  due_date DATE,
+  subtotal NUMERIC(15,2) DEFAULT 0,
+  tax_total NUMERIC(15,2) DEFAULT 0,
+  grand_total NUMERIC(15,2) DEFAULT 0,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+ALTER TABLE public.invoices ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Faturaları görebilir" ON public.invoices FOR SELECT USING (company_id = public.get_auth_company_id());
+CREATE POLICY "Fatura ekleyebilir" ON public.invoices FOR INSERT WITH CHECK (company_id = public.get_auth_company_id());
+CREATE POLICY "Fatura güncelleyebilir" ON public.invoices FOR UPDATE USING (company_id = public.get_auth_company_id());
+CREATE POLICY "Fatura silebilir" ON public.invoices FOR DELETE USING (company_id = public.get_auth_company_id());
