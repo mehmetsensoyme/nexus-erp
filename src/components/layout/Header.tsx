@@ -24,7 +24,7 @@ export default function Header() {
 
   // Global Data & UI
   const { contacts, invoices, depots, inventory, notifications, addNotification, markAllNotificationsRead, markNotificationRead, deleteNotification, clearAllNotifications } = useDataStore();
-  const { openDrawer, toggleSidebar, logout } = useUIStore();
+  const { openDrawer, toggleSidebar, logout, userProfile } = useUIStore();
   const unreadCount = notifications.filter(n => !n.read).length;
 
   // Live Notification Simulator
@@ -236,8 +236,8 @@ export default function Header() {
           {userMenuOpen && (
             <div className="absolute right-0 mt-3 w-56 bg-[#111111] border border-[#27272a] rounded-xl shadow-2xl py-2 animate-in fade-in slide-in-from-top-2 z-50">
               <div className="px-4 py-3 border-b border-[#27272a] mb-2 bg-[#1a1a1a]">
-                <p className="text-sm font-bold text-white">Yönetici Hesabı</p>
-                <p className="text-xs text-[#94a3b8]">admin@nexus.com</p>
+                <p className="text-sm font-bold text-white">{userProfile?.full_name || 'Sistem Yöneticisi'}</p>
+                <p className="text-xs text-[#94a3b8]">{userProfile?.email || 'admin@nexus.com'}</p>
               </div>
               <button onClick={() => { openDrawer('PROFILE'); setUserMenuOpen(false); }} className="w-full flex items-center gap-3 px-4 py-2 text-sm text-[#94a3b8] hover:bg-[#27272a] hover:text-white transition-colors">
                 <User size={16} /> Profilim
