@@ -67,18 +67,15 @@ CREATE TRIGGER on_auth_user_created
   FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
 
 -- 9. KURULUM SİHİRBAZI İÇİN GÜVENLİ FONKSİYON (RPC)
--- RLS kurallarına takılmadan güvenli bir şekilde şirketi ve profili tek seferde oluşturur
 CREATE OR REPLACE FUNCTION public.complete_onboarding(company_name TEXT, company_tax_no TEXT)
 RETURNS UUID AS $$
 DECLARE
   new_company_id UUID;
 BEGIN
-  -- 1. Şirketi oluştur ve oluşan ID'yi hafızaya al
   INSERT INTO public.companies (name, tax_no) 
   VALUES (company_name, company_tax_no) 
   RETURNING id INTO new_company_id;
   
-  -- 2. Kullanıcının profiline şirket ID'sini yaz (Eğer profil yoksa da oluştur)
   INSERT INTO public.profiles (id, company_id, full_name, role)
   VALUES (
     auth.uid(), 
@@ -89,7 +86,6 @@ BEGIN
   ON CONFLICT (id) DO UPDATE 
   SET company_id = new_company_id;
   
-  -- 3. İşlem bitti!
   RETURN new_company_id;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -108,8 +104,12 @@ CREATE TABLE IF NOT EXISTS public.contacts (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- CARİ KARTLAR İÇİN GÜVENLİK (Sadece kendi şirketinin carilerini görebilir/ekleyebilir)
 ALTER TABLE public.contacts ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Carileri görebilir" ON public.contacts;
+DROP POLICY IF EXISTS "Cari ekleyebilir" ON public.contacts;
+DROP POLICY IF EXISTS "Cari güncelleyebilir" ON public.contacts;
+DROP POLICY IF EXISTS "Cari silebilir" ON public.contacts;
 
 CREATE POLICY "Carileri görebilir" ON public.contacts FOR SELECT USING (company_id = public.get_auth_company_id());
 CREATE POLICY "Cari ekleyebilir" ON public.contacts FOR INSERT WITH CHECK (company_id = public.get_auth_company_id());
