@@ -43,7 +43,7 @@ export default function Login() {
 
       if (data.user) {
         toast.success('Giriş başarılı! Yönlendiriliyorsunuz...');
-        login();
+        await checkSession();
       }
     } catch (err: any) {
       toast.error('Beklenmeyen bir hata oluştu.');
